@@ -17,6 +17,11 @@ const parser = yargs(hideBin(process.argv))
     describe: 'The OTP to use for authentication.',
     type: "string",
   })
+  .option('no-headless', {
+    describe: 'Show the browser window instead of running headless',
+    type: 'boolean',
+    default: false
+  })
   .help();
 const argv = parser.parse();
 
@@ -36,7 +41,9 @@ const urlBuilder = () => {
 
 // start puppeteer
 (async () => {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ 
+    headless: !argv['no-headless']
+  });
   const page = await browser.newPage();
   await page.goto(urlBuilder());
 
